@@ -1,0 +1,33 @@
+<RCC>
+  <qresource prefix="ui">
+    <file>splash_screen.ui</file>
+    <file>JuezInteligenteMainWindow.ui</file>
+    <file>add_evidence_dialog_widget.ui</file>
+    <file>add_fact_dialog_widget.ui</file>
+    <file>case_edit_widget.ui</file>
+    <file>checklist_widget.ui</file>
+    <file>evidence_edit_widget.ui</file>
+    <file>fact_edit_widget.ui</file>
+    <file>manage_cases_dialog_widget.ui</file>
+    <file>new_case_dialog_widget.ui</file>
+    <file>no_selection_widget.ui</file>
+    <file>open_case_dialog_widget.ui</file>
+  </qresource>
+  <qresource prefix="images">
+    <file>img/exit.png</file>
+    <file>img/close-case.png</file>
+    <file>img/report.png</file>
+    <file>img/checklist.png</file>
+    <file>img/properties.png</file>
+    <file>img/manage-list.png</file>
+    <file>img/save-as.png</file>
+    <file>img/evidence.png</file>
+    <file>img/fact.png</file>
+    <file>img/hypothesis.png</file>
+    <file>img/judge.png</file>
+    <file>img/new.png</file>
+    <file>img/open.png</file>
+    <file>img/save.png</file>
+    <file>img/warning.png</file>
+  </qresource>
+</RCC>

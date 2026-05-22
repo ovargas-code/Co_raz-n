@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FactEditForm</class>
+ <widget class="QWidget" name="FactEditForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>470</width>
+    <height>352</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QFormLayout" name="formLayout_2">
+   <property name="rowWrapPolicy">
+    <enum>QFormLayout::WrapAllRows</enum>
+   </property>
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QLabel" name="hecho_label">
+     <property name="text">
+      <string>Fact label:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="fact_label_line_edit">
+     <property name="whatsThis">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>50</number>
+     </property>
+     <property name="placeholderText">
+      <string>Mandatory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="relevancia_label">
+     <property name="text">
+      <string>Relevance:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="relevance_combo_box">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Unsupported</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Unlikely</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Likely</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Most likely</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Very likely</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Almost true</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>True</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="fact_desc_label">
+     <property name="text">
+      <string>Fact description:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QPlainTextEdit" name="fact_desc_text_edit">
+     <property name="whatsThis">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Optional</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="rule_label">
+     <property name="text">
+      <string>Experience rule:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QPlainTextEdit" name="rule_text_edit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

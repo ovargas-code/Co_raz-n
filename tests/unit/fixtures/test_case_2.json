@@ -1,0 +1,82 @@
+{
+  "_id": {
+    "$oid": "608f5b69e78d61c52b8adb19"
+  },
+  "name": "Test case",
+  "claimant": "Demandante",
+  "defendant": "Demandado",
+  "radicado": "123456789",
+  "subsidiary_pretensions": "",
+  "pretense": {
+    "name": "P",
+    "label": "Hipotesis Principal",
+    "desc": "",
+    "fav_facts": [
+      {
+        "name": "H1",
+        "label": "H1",
+        "desc": "",
+        "fav_facts": [
+          {
+            "name": "H11",
+            "label": "H11",
+            "desc": "",
+            "fav_facts": [],
+            "unfav_facts": [],
+            "fav_evidence": [],
+            "unfav_evidence": [],
+            "ignored": false,
+            "position": {
+              "x": -400.0,
+              "y": 436.66666666666663
+            }
+          }
+        ],
+        "unfav_facts": [],
+        "fav_evidence": [],
+        "unfav_evidence": [],
+        "ignored": false,
+        "position": {
+          "x": -250.0,
+          "y": 95.0
+        }
+      }
+    ],
+    "unfav_facts": [
+      {
+        "name": "H2",
+        "label": "H2",
+        "desc": "",
+        "fav_facts": [],
+        "unfav_facts": [
+          {
+            "name": "H21",
+            "label": "H21",
+            "desc": "",
+            "fav_facts": [],
+            "unfav_facts": [],
+            "fav_evidence": [],
+            "unfav_evidence": [],
+            "ignored": false,
+            "position": {
+              "x": 200.0,
+              "y": 436.66666666666663
+            }
+          }
+        ],
+        "fav_evidence": [],
+        "unfav_evidence": [],
+        "ignored": false,
+        "position": {
+          "x": 50.0,
+          "y": 95.0
+        }
+      }
+    ],
+    "position": {
+      "x": -100.0,
+      "y": -152.0
+    }
+  },
+  "evidence_counter": 0
+}

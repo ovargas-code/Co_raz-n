@@ -1,0 +1,8 @@
+{
+  "db_name": "smart_judge_db",
+  "host": "cluster0.19djl.mongodb.net",
+  "port": 27017,
+  "user": "judge",
+  "password": "cWSHYZPT4HIwVxQ5",
+  "export_pw": "dfsDFs2gR6DG6"
+}

@@ -1,0 +1,234 @@
+{
+  "_id": {
+    "$oid": "5f6d063202300c310b2764be"
+  },
+  "name": "Caso de simulaci\u00f3n de venta",
+  "claimant": "Jesus",
+  "defendant": "Lina",
+  "radicado": "1234567890000000000000000",
+  "subsidiary_pretensions": "",
+  "pretense": {
+    "name": "P",
+    "label": "El vendedor simul\u00f3 la venta",
+    "desc": "El vendedor simul\u00f3 la venta del bien inmueble para evadir su responsabilidad de pago de una deuda con el demandante",
+    "probatory_weight": "Most likely",
+    "fav_facts": [
+      {
+        "name": "H1",
+        "label": "Nexo con el comprador",
+        "desc": "",
+        "relevance": "Very likely",
+        "probatory_weight": "Very likely",
+        "fav_facts": [],
+        "unfav_facts": [],
+        "fav_evidence": [
+          {
+            "name": "MP4",
+            "label": "Grabaci\u00f3n de video",
+            "type": "Documental",
+            "desc": "",
+            "relevance": "Very likely",
+            "credibility": "Almost true",
+            "position": {
+              "x": 58.345750000000066,
+              "y": -18.54483333333333
+            },
+            "ignored": false
+          },
+          {
+            "name": "MP5",
+            "label": "El testimonio de Lupe",
+            "type": "Testimonial",
+            "desc": "",
+            "relevance": "Very likely",
+            "credibility": "Almost true",
+            "position": {
+              "x": -157.02212499999996,
+              "y": -21.58658333333331
+            },
+            "ignored": false
+          }
+        ],
+        "unfav_evidence": [],
+        "ignored": false,
+        "position": {
+          "x": -172.93849999999998,
+          "y": -315.43787499999996
+        }
+      },
+      {
+        "name": "H2",
+        "label": "No entreg\u00f3 el bien",
+        "desc": "",
+        "relevance": "Very likely",
+        "probatory_weight": "Likely",
+        "fav_facts": [],
+        "unfav_facts": [],
+        "fav_evidence": [
+          {
+            "name": "MP2",
+            "label": "Declaraci\u00f3n de renta",
+            "type": "Documental",
+            "desc": "",
+            "relevance": "Almost true",
+            "credibility": "True",
+            "position": {
+              "x": -582.3815000000004,
+              "y": -26.943833333333295
+            },
+            "ignored": false
+          }
+        ],
+        "unfav_evidence": [
+          {
+            "name": "MP3",
+            "label": "Escritura p\u00fablica",
+            "type": "Documental",
+            "desc": "",
+            "relevance": "Very likely",
+            "credibility": "True",
+            "position": {
+              "x": -370.85675000000003,
+              "y": -23.76983333333329
+            },
+            "ignored": false
+          }
+        ],
+        "ignored": false,
+        "position": {
+          "x": -391.25175,
+          "y": -314.05737499999987
+        }
+      },
+      {
+        "name": "H3",
+        "label": "No recibi\u00f3 el pago",
+        "desc": "",
+        "relevance": "Very likely",
+        "probatory_weight": "Unsupported",
+        "fav_facts": [
+          {
+            "name": "H31",
+            "label": "No hay transacci\u00f3n en cuenta",
+            "desc": "",
+            "relevance": "Likely",
+            "probatory_weight": "Very likely",
+            "fav_facts": [],
+            "unfav_facts": [],
+            "fav_evidence": [
+              {
+                "name": "MP7",
+                "label": "Extracto bancario",
+                "type": "Documental",
+                "desc": "",
+                "relevance": "Very likely",
+                "credibility": "True",
+                "position": {
+                  "x": -1414.217625,
+                  "y": 310.88758333333345
+                },
+                "ignored": false
+              }
+            ],
+            "unfav_evidence": [],
+            "ignored": false,
+            "position": {
+              "x": -1264.217625,
+              "y": -30.779083333333197
+            }
+          }
+        ],
+        "unfav_facts": [
+          {
+            "name": "H32",
+            "label": "El vendedor tiene un comprobante de pago",
+            "desc": "",
+            "relevance": "Likely",
+            "probatory_weight": "Likely",
+            "fav_facts": [],
+            "unfav_facts": [],
+            "fav_evidence": [
+              {
+                "name": "MP8",
+                "label": "El comprobante de pago firmado",
+                "type": "Documental",
+                "desc": "",
+                "relevance": "Likely",
+                "credibility": "Likely",
+                "position": {
+                  "x": -963.0745000000003,
+                  "y": 315.45020833333353
+                },
+                "ignored": false
+              }
+            ],
+            "unfav_evidence": [],
+            "ignored": false,
+            "position": {
+              "x": -813.0745000000003,
+              "y": -26.21645833333315
+            }
+          }
+        ],
+        "fav_evidence": [
+          {
+            "name": "MP1",
+            "label": "Testimonio de Miguel",
+            "type": "Testimonial",
+            "desc": "",
+            "relevance": "Likely",
+            "credibility": "Likely",
+            "position": {
+              "x": -1037.3809999999999,
+              "y": -23.90208333333322
+            },
+            "ignored": false
+          }
+        ],
+        "unfav_evidence": [],
+        "ignored": false,
+        "position": {
+          "x": -607.18975,
+          "y": -316.17337499999985
+        }
+      }
+    ],
+    "unfav_facts": [
+      {
+        "name": "H4",
+        "label": "Inter\u00e9s diferente a vender",
+        "desc": "",
+        "relevance": "Very likely",
+        "probatory_weight": "Likely",
+        "fav_facts": [],
+        "unfav_facts": [],
+        "fav_evidence": [
+          {
+            "name": "MP6",
+            "label": "Inversi\u00f3n",
+            "type": "Indiciaria",
+            "desc": "",
+            "relevance": "Likely",
+            "credibility": "Almost true",
+            "position": {
+              "x": 269.7195,
+              "y": -16.197958333333247
+            },
+            "ignored": false
+          }
+        ],
+        "unfav_evidence": [],
+        "ignored": false,
+        "position": {
+          "x": 53.91600000000017,
+          "y": -313.62699999999995
+        }
+      }
+    ],
+    "position": {
+      "x": -226.837,
+      "y": -542.157125
+    }
+  },
+  "evidence_counter": 8
+}
