@@ -1,4 +1,6 @@
 import sys
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 import logging
 from pathlib import Path
 
