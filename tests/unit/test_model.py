@@ -5,11 +5,11 @@ from PySide2.QtCore import QLocale, QTranslator, QLibraryInfo
 from dependency_injector.wiring import Provide, inject
 from importlib.resources import files
 
-import juezinteligente
-from juezinteligente.model.judge import Evidence, Case, Hypothesis, Fact, ModelChecker
-from juezinteligente.ui.constants import Constants, EvidenceType
-from juezinteligente.util.containers import Container
-from juezinteligente.util.custom_exceptions import EvidenceException, HypothesisException
+import co_razon
+from co_razon.model.judge import Evidence, Case, Hypothesis, Fact, ModelChecker
+from co_razon.ui.constants import Constants, EvidenceType
+from co_razon.util.containers import Container
+from co_razon.util.custom_exceptions import EvidenceException, HypothesisException
 from tests.unit.mocks.mocks import MockVisitor
 
 TRUE = 'True'

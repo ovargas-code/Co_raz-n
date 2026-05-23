@@ -39,5 +39,5 @@ def split_string(data: str, max_line_length: int):
     return new_str.strip()
 
 
-app_config = _load_config(files('juezinteligente.util').joinpath(Path('config.json')))
-db_config = _load_config(files('juezinteligente.util').joinpath(Path('db_config.json')))
+app_config = _load_config(files('co_razon.util').joinpath(Path('config.json')))
+db_config = _load_config(files('co_razon.util').joinpath(Path('db_config.json')))

@@ -9,10 +9,11 @@ from PySide2.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsItem, QSty
     QGraphicsSceneMouseEvent, QAction, QActionGroup
 from dependency_injector.wiring import Provide
 
-from juezinteligente.model.judge import NodePosition, Case
-from juezinteligente.ui.constants import Constants
-from juezinteligente.util import app_config, convert_data_to_color, split_string
-from juezinteligente.util.containers import Container
+from co_razon.model.judge import NodePosition, Case
+from co_razon.ui.constants import Constants
+from co_razon.util import app_config, convert_data_to_color, split_string
+from co_razon.util.containers import Container
+from co_razon.util.custom_exceptions import ProbatoryWeightException
 
 
 class CaseView(QGraphicsView):
@@ -512,6 +513,17 @@ class NodeItem(QGraphicsObject):
         elif child_node in self.unfav_children:
             self.unfav_children.remove(child_node)
 
+    def recalculate_weights_upward(self):
+        curr = self.parent_node
+        while curr is not None:
+            try:
+                curr.model.calculate_evidential_weight()
+            except ProbatoryWeightException:
+                if hasattr(curr.model, 'probatory_weight'):
+                    curr.model.probatory_weight = None
+            curr.update()
+            curr = curr.parent_node
+
     def _create_style(self):
         """ Creates the style that is used to render the node
 
@@ -826,26 +838,50 @@ class NodeWithRelevance(NodeItem):
         super(NodeWithRelevance, self).__init__(text, label, parent_node)
         self.base_height = app_config['node']['child_height']
         self.node_center.setY(self.base_height / 6.0 * 5.2)
+        plug_y = self.base_height / 6.0 * 5.33
         fav_x = self.node_center.x() - self.radius - self.fav_width
-        self.fav_center = QPointF(fav_x, self.node_center.y())
+        self.fav_center = QPointF(fav_x, plug_y)
         unfav_x = self.node_center.x() + self.radius + self.fav_width
-        self.unfav_center = QPointF(unfav_x, self.node_center.y())
+        self.unfav_center = QPointF(unfav_x, plug_y)
         self.in_plug = InPlugItem(self)
 
+    def get_layout_positions(self, painter: QPainter):
+        text = split_string(self.model.label, 20)
+        lines = text.split('\n')
+        if len(lines) > 3:
+            lines = lines[:3]
+        
+        font = painter.font()
+        new_font = font.__copy__()
+        new_font.setPointSize(10)
+        metrics_desc = QFontMetrics(new_font)
+        text_height = len(lines) * metrics_desc.lineSpacing()
+        
+        y_desc = 15
+        y_relevance = y_desc + text_height + 10
+        
+        metrics_header = QFontMetrics(font)
+        header_height = metrics_header.height()
+        y_lower = y_relevance + header_height + 34 + 10
+        
+        return y_desc, y_relevance, y_lower
+
     def _paint_label(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        text = split_string(self.model.label, 19)
+        text = split_string(self.model.label, 20)
+        lines = text.split('\n')
+        if len(lines) > 3:
+            text = "\n".join(lines[:2]) + "\n" + lines[2][:17] + "..."
+            lines = text.split('\n')
 
         font: QFont = painter.font()
         new_font: QFont = font.__copy__()
-        new_font.setPointSize(11)
+        new_font.setPointSize(10)
         metrics = QFontMetrics(new_font)
+        text_height = len(lines) * metrics.lineSpacing()
 
-        num_lines = len(text.split('\n'))
-        text_height = num_lines * metrics.lineSpacing()
-
-        y = self.node_center.y() - (self.attr_height * 7)
+        y_desc, _, _ = self.get_layout_positions(painter)
         rect = QRect(self.node_center.x() - self.attr_width / 2 - 5,
-                     y, self.attr_width + 11, self.attr_height + text_height + 9)
+                     y_desc, self.attr_width + 10, text_height + 5)
 
         text_pen = QPen()
         text_pen.setColor(convert_data_to_color(app_config['node']['attr_text_color']))
@@ -870,9 +906,10 @@ class NodeWithRelevance(NodeItem):
         label_text = self._relevance_label()
         text_width = metrics.boundingRect(label_text).width()
         text_height = metrics.boundingRect(label_text).height()
+        
+        _, y_relevance, _ = self.get_layout_positions(painter)
         x = self.node_center.x() - text_width / 2
-        y = self.node_center.y() - (self.radius + self.attr_height + text_height) * 1.8
-        text_rect = QRect(x, y, text_width, text_height)
+        text_rect = QRect(x, y_relevance, text_width, text_height)
 
         # Draw header text with soft slate color
         header_pen = QPen(QColor(203, 213, 225))
@@ -880,7 +917,7 @@ class NodeWithRelevance(NodeItem):
         painter.drawText(text_rect, QtCore.Qt.AlignCenter, label_text)
 
         rect = QRect(self.node_center.x() - self.attr_width / 2,
-                     y + text_height, self.attr_width, self.attr_height)
+                     y_relevance + text_height + 4, self.attr_width, self.attr_height)
         painter.setBrush(brush)
         painter.setPen(self._relevance_pen)
         painter.drawRoundedRect(rect, 6, 6)
@@ -915,36 +952,47 @@ class HypothesisNode(NodeItem):
         super(HypothesisNode, self).__init__(model.desc, model.name, parent_node)
         self.base_height = app_config['node']['child_height']
         self.node_center.setY(self.base_height / 6.0 * 5.2)
+        plug_y = self.base_height / 6.0 * 5.33
         fav_x = self.node_center.x() - self.radius - self.fav_width
-        self.fav_center = QPointF(fav_x, self.node_center.y())
+        self.fav_center = QPointF(fav_x, plug_y)
         unfav_x = self.node_center.x() + self.radius + self.fav_width
-        self.unfav_center = QPointF(unfav_x, self.node_center.y())
+        self.unfav_center = QPointF(unfav_x, plug_y)
         self.model = model
         self.out_fav_plug = OutFavPlugItem(self)
         self.out_unfav_plug = OutUnfavPlugItem(self)
 
-    def _paint_node_base(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        super()._paint_node_base(painter, option)
-        image = QImage(":/images/img/hypothesis.png")
-        img_point = QPointF(self.node_center.x() - image.width() / 2,
-                            self.node_center.y() - image.height() / 2 + 5)
-
-        painter.drawImage(img_point, image)
+    def get_layout_positions(self, painter: QPainter):
+        text = split_string(self.model.label, 20)
+        lines = text.split('\n')
+        if len(lines) > 3:
+            lines = lines[:3]
+        
+        font = painter.font()
+        new_font = font.__copy__()
+        new_font.setPointSize(10)
+        metrics_desc = QFontMetrics(new_font)
+        text_height = len(lines) * metrics_desc.lineSpacing()
+        
+        y_desc = 15
+        y_attr = y_desc + text_height + 15
+        return y_desc, y_attr
 
     def _paint_label(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        text = split_string(self.model.label, 19)
+        text = split_string(self.model.label, 20)
+        lines = text.split('\n')
+        if len(lines) > 3:
+            text = "\n".join(lines[:2]) + "\n" + lines[2][:17] + "..."
+            lines = text.split('\n')
 
         font: QFont = painter.font()
         new_font: QFont = font.__copy__()
-        new_font.setPointSize(11)
+        new_font.setPointSize(10)
         metrics = QFontMetrics(new_font)
+        text_height = len(lines) * metrics.lineSpacing()
 
-        num_lines = len(text.split('\n'))
-        text_height = num_lines * metrics.lineSpacing()
-
-        y = self.node_center.y() - (self.attr_height * 7)
+        y_desc, _ = self.get_layout_positions(painter)
         rect = QRect(self.node_center.x() - self.attr_width / 2 - 5,
-                     y, self.attr_width + 11, self.attr_height + text_height + 9)
+                     y_desc, self.attr_width + 10, text_height + 5)
         
         text_pen = QPen()
         text_pen.setColor(convert_data_to_color(app_config['node']['attr_text_color']))
@@ -958,21 +1006,22 @@ class HypothesisNode(NodeItem):
         brush = QBrush()
         brush.setColor(convert_data_to_color(app_config['node']['pretense_attr_color']))
         brush.setStyle(Qt.SolidPattern)
+
+        _, y_attr = self.get_layout_positions(painter)
         x = self.node_center.x() - self.attr_width / 2
-        y = self.node_center.y() - self.attr_height * 2
 
         metrics = QFontMetrics(painter.font())
-        label_text = self.constants.PROBATORY_WEIGHT_LABEL  # app_config['node']['calculated_attr_label']
+        label_text = self.constants.PROBATORY_WEIGHT_LABEL
         text_width = metrics.boundingRect(label_text).width()
         text_height = metrics.boundingRect(label_text).height()
-        text_rect = QRect(self.node_center.x() - text_width / 2, y - text_height, text_width, text_height)
+        text_rect = QRect(self.node_center.x() - text_width / 2, y_attr, text_width, text_height)
         
         # Soft slate header
         header_pen = QPen(QColor(203, 213, 225))
         painter.setPen(header_pen)
         painter.drawText(text_rect, QtCore.Qt.AlignCenter, label_text)
 
-        rect = QRect(x, y, self.attr_width, self.attr_height)
+        rect = QRect(x, y_attr + text_height + 4, self.attr_width, self.attr_height)
         painter.setBrush(brush)
         painter.setPen(self._relevance_pen)
         painter.drawRoundedRect(rect, 6, 6)
@@ -988,13 +1037,6 @@ class HypothesisNode(NodeItem):
         painter.drawText(rect, QtCore.Qt.AlignCenter, text)
 
     def _paint_lower_attributes(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        """
-        This method in not implemented because an hypothesis node does not need a lower attribute
-
-        :param painter:
-        :param option:
-        :return:
-        """
         pass
 
     def _paint_rect_bg(self, painter: QPainter, option: QStyleOptionGraphicsItem, rect: QRectF):
@@ -1017,13 +1059,7 @@ class EvidenceNode(NodeWithRelevance):
         self.out_unfav_plug = None
         self.model = model
 
-    def _paint_node_base(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        super()._paint_node_base(painter, option)
-        image = QImage(":/images/img/evidence.png")
-        img_point = QPointF(self.node_center.x() - image.width() / 2,
-                            self.node_center.y() - image.height() / 2 + 5)
 
-        painter.drawImage(img_point, image)
 
     def _paint_rect_bg(self, painter: QPainter, option: QStyleOptionGraphicsItem, rect: QRectF):
         brush = QBrush(convert_data_to_color(app_config['node']['evidence_bg_color']))
@@ -1032,28 +1068,27 @@ class EvidenceNode(NodeWithRelevance):
         painter.drawRoundedRect(rect, 12.0, 12.0)
 
     def _relevance_label(self):
-        return self.constants.PERTINENCE  # app_config['node']['pertinence_label']
+        return self.constants.PERTINENCE
 
     def _paint_lower_attributes(self, painter: QPainter, option: QStyleOptionGraphicsItem):
         self._lower_attr_pen.setColor(convert_data_to_color(app_config['node']['credibility_color']))
         brush = QBrush()
         brush.setColor(convert_data_to_color(app_config['node']['credibility_color']))
         brush.setStyle(Qt.SolidPattern)
-        x = self.node_center.x() - self.attr_width / 2
-        y = self.node_center.y() - self.attr_height * 2
-
+        
+        _, _, y_lower = self.get_layout_positions(painter)
         metrics = QFontMetrics(painter.font())
-        label_text = self.constants.CREDIBILITY  # ['node']['credibility_label']
+        label_text = self.constants.CREDIBILITY
         text_width = metrics.boundingRect(label_text).width()
         text_height = metrics.boundingRect(label_text).height()
-        text_rect = QRect(self.node_center.x() - text_width / 2, y - text_height, text_width, text_height)
+        text_rect = QRect(self.node_center.x() - text_width / 2, y_lower, text_width, text_height)
         
         # Soft slate header
         header_pen = QPen(QColor(203, 213, 225))
         painter.setPen(header_pen)
         painter.drawText(text_rect, QtCore.Qt.AlignCenter, label_text)
 
-        rect = QRect(x, y, self.attr_width, self.attr_height)
+        rect = QRect(self.node_center.x() - self.attr_width / 2, y_lower + text_height + 4, self.attr_width, self.attr_height)
         painter.setBrush(brush)
         painter.setPen(self._lower_attr_pen)
         painter.drawRoundedRect(rect, 6, 6)
@@ -1100,23 +1135,16 @@ class EvidenceNode(NodeWithRelevance):
 
     def update_credibility(self, action: QAction):
         self.model.credibility = action.text()
+        self.recalculate_weights_upward()
         self.update()
 
     def paint(self, painter: QPainter, option: QStyleOptionGraphicsItem, widget: typing.Optional[QWidget] = ...):
         super().paint(painter, option, widget)
 
     def _paint_favorable_plug(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        """
-        This method overrides the parent logic because an evidence node does not need
-        the favorable and unfavorable plugs
-        """
         pass
 
     def _paint_unfavorable_plug(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        """
-        This method overrides the parent logic because an evidence node does not need
-        the favorable and unfavorable plugs
-        """
         pass
 
 
@@ -1127,13 +1155,7 @@ class FactNode(NodeWithRelevance):
         self.out_fav_plug = OutFavPlugItem(self)
         self.out_unfav_plug = OutUnfavPlugItem(self)
 
-    def _paint_node_base(self, painter: QPainter, option: QStyleOptionGraphicsItem):
-        super()._paint_node_base(painter, option)
-        image = QImage(":/images/img/fact.png")
-        img_point = QPointF(self.node_center.x() - image.width()/2,
-                            self.node_center.y() - image.height()/2 + 5)
 
-        painter.drawImage(img_point, image)
 
     def _paint_rect_bg(self, painter: QPainter, option: QStyleOptionGraphicsItem, rect: QRectF):
         brush = QBrush(convert_data_to_color(app_config['node']['fact_bg_color']))
@@ -1142,32 +1164,30 @@ class FactNode(NodeWithRelevance):
         painter.drawRoundedRect(rect, 12.0, 12.0)
 
     def _relevance_label(self):
-        return self.constants.RELEVANCE  # app_config['node']['relevance_label']
+        return self.constants.RELEVANCE
 
     def _paint_lower_attributes(self, painter: QPainter, option: QStyleOptionGraphicsItem):
         self._lower_attr_pen.setColor(convert_data_to_color(app_config['node']['pretense_attr_color']))
         brush = QBrush()
         brush.setColor(convert_data_to_color(app_config['node']['pretense_attr_color']))
         brush.setStyle(Qt.SolidPattern)
-        x = self.node_center.x() - self.attr_width / 2
-        y = self.node_center.y() - self.attr_height * 2
-
+        
+        _, _, y_lower = self.get_layout_positions(painter)
         metrics = QFontMetrics(painter.font())
-        label_text = self.constants.PROBATORY_WEIGHT_LABEL  # app_config['node']['calculated_attr_label']
+        label_text = self.constants.PROBATORY_WEIGHT_LABEL
         text_width = metrics.boundingRect(label_text).width()
         text_height = metrics.boundingRect(label_text).height()
-        text_rect = QRect(self.node_center.x() - text_width / 2, y - text_height, text_width, text_height)
+        text_rect = QRect(self.node_center.x() - text_width / 2, y_lower, text_width, text_height)
         
         # Soft slate header
         header_pen = QPen(QColor(203, 213, 225))
         painter.setPen(header_pen)
         painter.drawText(text_rect, QtCore.Qt.AlignCenter, label_text)
 
-        rect = QRect(x, y, self.attr_width, self.attr_height)
+        rect = QRect(self.node_center.x() - self.attr_width / 2, y_lower + text_height + 4, self.attr_width, self.attr_height)
         painter.setBrush(brush)
         painter.setPen(self._lower_attr_pen)
         painter.drawRoundedRect(rect, 6, 6)
-
 
         if not self.model.probatory_weight:
             text = self.constants.NOT_YET_CALCULATED

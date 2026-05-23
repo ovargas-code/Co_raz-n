@@ -7,15 +7,15 @@ from pathlib import Path
 from dependency_injector.wiring import Provide
 from importlib.resources import files
 
-import juezinteligente.ui.resources
+import co_razon.ui.resources
 
 from PySide2.QtCore import QLocale, QTranslator, QLibraryInfo
 from PySide2.QtWidgets import QApplication
 
-from juezinteligente.ui.main_win import SplashScreen
-from juezinteligente.util.containers import Container
+from co_razon.ui.main_win import SplashScreen
+from co_razon.util.containers import Container
 
-logging.basicConfig(filename=files('juezinteligente').joinpath(Path('log/juez-inteligente.log')),
+logging.basicConfig(filename=files('co_razon').joinpath(Path('log/co-razon.log')),
                     level=logging.DEBUG,
                     format='[%(levelname)s] on %(asctime)s: (%(name)s) - %(message)s',
                     datefmt='%d/%m/%Y %I:%M:%S %p')
@@ -28,14 +28,20 @@ def main(app: QApplication = Provide[Container.app]):
     # LOAD TRANSLATIONS
     locale = QLocale.system().name()
     qt_translator = QTranslator(app)
-    if qt_translator.load("qtbase_" + locale, QLibraryInfo.location(QLibraryInfo.TranslationsPath)):
+    qt_loaded = qt_translator.load("qtbase_" + locale, QLibraryInfo.location(QLibraryInfo.TranslationsPath))
+    if not qt_loaded and locale.startswith("es"):
+        qt_loaded = qt_translator.load("qtbase_es", QLibraryInfo.location(QLibraryInfo.TranslationsPath))
+    if qt_loaded:
         app.installTranslator(qt_translator)
     else:
         logger.warning(f"No se pudo cargar la traducción de Qt para {locale}")
 
     app_translator = QTranslator(app)
-    path = files("juezinteligente").joinpath(Path("i18n/"))
-    if app_translator.load(locale, str(path)):
+    path = files("co_razon").joinpath(Path("i18n/"))
+    app_loaded = app_translator.load(locale, str(path))
+    if not app_loaded and locale.startswith("es"):
+        app_loaded = app_translator.load("es_CO", str(path))
+    if app_loaded:
         app.installTranslator(app_translator)
     else:
         logger.warning(f"No se pudo cargar la traducción de la aplicación para {locale}: {path}")
@@ -56,9 +62,9 @@ if __name__ == '__main__':
     container = Container()
     container.init_resources()
     container.wire(modules=[sys.modules[__name__],
-                            juezinteligente.ui.main_win,
-                            juezinteligente.ui.graph,
-                            juezinteligente.model.judge])
+                            co_razon.ui.main_win,
+                            co_razon.ui.graph,
+                            co_razon.model.judge])
     main()
 
 

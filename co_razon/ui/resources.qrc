@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="ui">
     <file>splash_screen.ui</file>
-    <file>JuezInteligenteMainWindow.ui</file>
+    <file>CoRazonMainWindow.ui</file>
     <file>add_evidence_dialog_widget.ui</file>
     <file>add_fact_dialog_widget.ui</file>
     <file>case_edit_widget.ui</file>

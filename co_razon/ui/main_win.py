@@ -1,6 +1,6 @@
 import logging
 
-from PySide2.QtCore import QSize, Qt, QTimer, QCoreApplication, QRegExp
+from PySide2.QtCore import QSize, Qt, QTimer, QCoreApplication, QRegExp, QRect
 from PySide2.QtGui import QIcon, QStandardItem, QStandardItemModel, QColor, QPixmap, QRegExpValidator
 from PySide2.QtWidgets import QMainWindow, QDialog, QTabWidget, QAction, QWidget, QMessageBox, \
     QPlainTextEdit, QComboBox, QLineEdit, QDockWidget, QButtonGroup, QListWidget, \
@@ -8,24 +8,24 @@ from PySide2.QtWidgets import QMainWindow, QDialog, QTabWidget, QAction, QWidget
     QGraphicsDropShadowEffect, QFileDialog, QHBoxLayout
 from dependency_injector.wiring import Provide, inject
 
-from juezinteligente.model.judge import Case, Hypothesis, Fact, Evidence, Observer, ModelChecker
-from juezinteligente.persistence.data_access import DataAccessManager, ImportCasesError, NotValidFile
-from juezinteligente.reports.report import DocxReportGenerator
-from juezinteligente.ui.constants import Constants
-from juezinteligente.ui.graph import CaseView, EvidenceNode, FactNode, HypothesisNode
-from juezinteligente.ui.ui_add_evidence_dialog_widget import Ui_AddEvidenceForm
-from juezinteligente.ui.ui_add_fact_dialog_widget import Ui_AddFactForm
-from juezinteligente.ui.ui_case_edit_widget import Ui_CaseEditForm
-from juezinteligente.ui.ui_evidence_edit_widget import Ui_EvidenceEditForm
-from juezinteligente.ui.ui_fact_edit_widget import Ui_FactEditForm
-from juezinteligente.ui.ui_manage_cases_dialog_widget import Ui_ManageCasesForm
-from juezinteligente.ui.ui_new_case_dialog_widget import Ui_NewCaseForm
-from juezinteligente.ui.ui_no_selection_widget import Ui_NoSelectionForm
-from juezinteligente.ui.ui_open_case_dialog_widget import Ui_OpenCaseForm
-from juezinteligente.ui.ui_splash_screen import Ui_SplashScreen
-from juezinteligente.util.containers import Container
-from juezinteligente.util.custom_exceptions import ProbatoryWeightException
-from juezinteligente.ui.import_pdf_dialog import ImportPdfDialog
+from co_razon.model.judge import Case, Hypothesis, Fact, Evidence, Observer, ModelChecker
+from co_razon.persistence.data_access import DataAccessManager, ImportCasesError, NotValidFile
+from co_razon.reports.report import DocxReportGenerator
+from co_razon.ui.constants import Constants
+from co_razon.ui.graph import CaseView, EvidenceNode, FactNode, HypothesisNode
+from co_razon.ui.ui_add_evidence_dialog_widget import Ui_AddEvidenceForm
+from co_razon.ui.ui_add_fact_dialog_widget import Ui_AddFactForm
+from co_razon.ui.ui_case_edit_widget import Ui_CaseEditForm
+from co_razon.ui.ui_evidence_edit_widget import Ui_EvidenceEditForm
+from co_razon.ui.ui_fact_edit_widget import Ui_FactEditForm
+from co_razon.ui.ui_manage_cases_dialog_widget import Ui_ManageCasesForm
+from co_razon.ui.ui_new_case_dialog_widget import Ui_NewCaseForm
+from co_razon.ui.ui_no_selection_widget import Ui_NoSelectionForm
+from co_razon.ui.ui_open_case_dialog_widget import Ui_OpenCaseForm
+from co_razon.ui.ui_splash_screen import Ui_SplashScreen
+from co_razon.util.containers import Container
+from co_razon.util.custom_exceptions import ProbatoryWeightException
+from co_razon.ui.import_pdf_dialog import ImportPdfDialog
 
 logger = logging.getLogger(__name__)
 counter = 0
@@ -49,13 +49,62 @@ class SplashScreen(QMainWindow):
         # Add judge image (hidden per user request)
         self.ui.label_image.hide()
 
+        # Premium UX/UI styling modifications
+        self.ui.dropShadowFrame.setStyleSheet("""
+            QFrame {
+                background-color: rgb(11, 15, 26);
+                color: rgb(241, 245, 249);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 16px;
+            }
+        """)
+
         # Drop shadow effect
         self.shadow = QGraphicsDropShadowEffect(self)
-        self.shadow.setBlurRadius(20)
+        self.shadow.setBlurRadius(25)
         self.shadow.setXOffset(0)
-        self.shadow.setYOffset(0)
-        self.shadow.setColor(QColor(0, 0, 0, 60))
+        self.shadow.setYOffset(4)
+        self.shadow.setColor(QColor(0, 0, 0, 120))
         self.ui.dropShadowFrame.setGraphicsEffect(self.shadow)
+
+        # Title: Clean white with rose underscore glow
+        self.ui.label_title.setText("<span style=\"color: #ffffff; font-weight: 800; font-family: 'Segoe UI', sans-serif;\">Co<span style=\"color: #F43F5E;\">_</span>razón</span>")
+        self.ui.label_title.setGeometry(QRect(0, 100, 780, 80))
+        self.ui.label_title.setAlignment(Qt.AlignCenter)
+
+        # Subtitle
+        translated_description = self.tr("The proof of an illusion")
+        self.ui.label_description.setText(f"<span style=\"font-style: italic; color: #94A3B8; font-family: 'Segoe UI', sans-serif;\">{translated_description}</span>")
+        self.ui.label_description.setGeometry(QRect(0, 180, 780, 30))
+        self.ui.label_description.setAlignment(Qt.AlignCenter)
+
+        # Sleek thin progress bar (6px height)
+        self.ui.progressBar.setGeometry(QRect(190, 250, 400, 6))
+        self.ui.progressBar.setTextVisible(False)
+        self.ui.progressBar.setStyleSheet("""
+            QProgressBar {
+                background-color: rgba(255, 255, 255, 0.05);
+                border-radius: 3px;
+                border-style: none;
+            }
+            QProgressBar::chunk {
+                border-radius: 3px;
+                background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #F43F5E, stop:1 #6366F1);
+            }
+        """)
+
+        # Loading Label: Centered and capitalized
+        self.ui.label_loading.setGeometry(QRect(0, 270, 780, 25))
+        self.ui.label_loading.setAlignment(Qt.AlignCenter)
+        self.ui.label_loading.setStyleSheet("color: #64748B; font-weight: 600; font-family: 'Segoe UI', sans-serif; font-size: 9pt;")
+
+        # Credits: Combined single centered label to fix spacing
+        self.ui.label_credits_2.hide()
+        self.ui.label_credits.setGeometry(QRect(0, 380, 780, 35))
+        self.ui.label_credits.setAlignment(Qt.AlignCenter)
+        created_by_html = self.ui.label_credits_2.text()
+        text_label = "Creado por:" if "creado" in created_by_html.lower() else "Created by:"
+        self.ui.label_credits.setText(f"<html><body><span style='color: #64748B; font-family: \"Segoe UI\", sans-serif; font-size: 9pt;'>{text_label}</span> <span style='color: #94A3B8; font-family: \"Segoe UI\", sans-serif; font-size: 9pt; font-weight: bold;'>Orión Vargas</span></body></html>")
 
         # QTimer -> Start
         self.timer = QTimer()
@@ -68,7 +117,7 @@ class SplashScreen(QMainWindow):
 
     def change_loading_text(self, text):
         self.step += 1
-        QTimer.singleShot(1500 * self.step, lambda: self.ui.label_loading.setText(self.tr(text)))
+        QTimer.singleShot(1500 * self.step, lambda: self.ui.label_loading.setText(self.tr(text).upper() + "..."))
 
     def progress(self):
         global counter
@@ -82,7 +131,7 @@ class SplashScreen(QMainWindow):
             self.timer.stop()
 
             # show main window
-            main_win = JuezInteligenteWindow()
+            main_win = CoRazonWindow()
             main_win.showMaximized()
 
             # close splash screen
@@ -242,6 +291,7 @@ class EvidenceEditorWidget(QWidget):
         self.model.credibility = self.ui.credibility_combo_box.currentText()
         self.model.type = self.ui.evidence_type_combo_box.currentText()
 
+        self.node.recalculate_weights_upward()
         self.node.update()
         self.relevance_change_flag = False
 
@@ -254,7 +304,7 @@ class EvidenceEditorWidget(QWidget):
 
 
 @Observer.register
-class JuezInteligenteWindow(QMainWindow):
+class CoRazonWindow(QMainWindow):
     """
     The main window of the application. This class is registered as an observer for the model elements.
     The @Observer.register decorator is a way to indicate that this class implements the Observer interface
@@ -264,7 +314,7 @@ class JuezInteligenteWindow(QMainWindow):
                  constants: Constants = Provide[Container.constants],
                  evidence_type_repr = Provide[Container.evidence_type_repr],
                  parent=None):
-        super(JuezInteligenteWindow, self).__init__(parent)
+        super(CoRazonWindow, self).__init__(parent)
 
         self.data_access_manager: DataAccessManager = data_access_manager
         self.constants = constants

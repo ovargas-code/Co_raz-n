@@ -3,7 +3,7 @@ from typing import List, Optional, Callable
 from pydantic import BaseModel, Field
 from google import genai
 from google.genai import types
-from juezinteligente.model.judge import Case, Hypothesis, Fact, Evidence
+from co_razon.model.judge import Case, Hypothesis, Fact, Evidence
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ def parse_lawsuit_with_gemini(
     
     if contestacion_text.strip():
         system_instruction = (
-            "Eres un analista legal experto y juez inteligente. Tu tarea es analizar dos textos del mismo proceso judicial: "
+            "Eres un analista legal experto y co_razon. Tu tarea es analizar dos textos del mismo proceso judicial: "
             "el texto de la DEMANDA y el texto de la CONTESTACIÓN. Tu objetivo es comparar ambos textos y extraer "
             "de forma estructurada únicamente los HECHOS CONTROVERTIDOS (aquellos hechos que una de las partes afirma y "
             "la otra niega, contradice o discute; es decir, en los que no están de acuerdo).\n"
@@ -92,7 +92,7 @@ def parse_lawsuit_with_gemini(
         )
     else:
         system_instruction = (
-            "Eres un analista legal experto y juez inteligente. Tu tarea es analizar el texto de una demanda judicial "
+            "Eres un analista legal experto y co_razon. Tu tarea es analizar el texto de una demanda judicial "
             "y extraer de forma estructurada los datos del proceso, la pretensión principal, los hechos que la sustentan y las pruebas aportadas.\n"
             "Reglas críticas:\n"
             "1. Identifica el origen de los hechos siempre como 'demandante' en el campo 'source'.\n"

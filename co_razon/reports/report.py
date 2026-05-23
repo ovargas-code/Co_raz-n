@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from docx import Document
 from docx.shared import Inches, RGBColor
 
-from juezinteligente.model.judge import Case, Fact
+from co_razon.model.judge import Case, Fact
 
 DESCRIPTION = "Descripción: "
 LIST_BULLET = "List Bullet"

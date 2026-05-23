@@ -1,6 +1,6 @@
 services:
-  proyectojuezinteligente:
-    image: proyectojuezinteligente
+  proyectoco_razon:
+    image: proyectoco_razon
     build:
       context: .
       dockerfile: ./Dockerfile

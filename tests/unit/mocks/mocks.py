@@ -1,5 +1,5 @@
-from juezinteligente.model.judge import CheckerVisitor
-from juezinteligente.persistence.data_access import DataAccessManager
+from co_razon.model.judge import CheckerVisitor
+from co_razon.persistence.data_access import DataAccessManager
 
 
 class DataAccessManagerMock(DataAccessManager):

@@ -6,9 +6,9 @@ from json.decoder import JSONDecodeError
 from zipfile import ZipFile
 
 from mongoengine import connect, ConnectionFailure, OperationError, ValidationError
-from juezinteligente.model import judge
+from co_razon.model import judge
 from pathlib import Path
-from juezinteligente.util import db_config
+from co_razon.util import db_config
 
 logger = logging.getLogger(__name__)
 

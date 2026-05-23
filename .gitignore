@@ -140,11 +140,11 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-/juezinteligente/data/
+/co_razon/data/
 /.scannerwork/
-!/juez-inteligente.log
+!/co-razon.log
 .idea/.gitignore
-.idea/JuezInteligente.iml
+.idea/CoRazon.iml
 .idea/dataSources.local.xml
 .idea/dataSources.xml
 .idea/dataSources/

@@ -2,12 +2,12 @@ import sys
 import pytest
 from PySide2.QtCore import QPointF
 
-import juezinteligente.ui.resources
+import co_razon.ui.resources
 
-from juezinteligente.model.judge import Hypothesis, Case, Fact, Evidence
-from juezinteligente.ui.graph import CaseView, HypothesisNode, FactNode, EvidenceNode, ConnectionItem
-from juezinteligente.ui.main_win import JuezInteligenteWindow
-from juezinteligente.util.containers import Container
+from co_razon.model.judge import Hypothesis, Case, Fact, Evidence
+from co_razon.ui.graph import CaseView, HypothesisNode, FactNode, EvidenceNode, ConnectionItem
+from co_razon.ui.main_win import CoRazonWindow
+from co_razon.util.containers import Container
 from tests.unit.mocks.mocks import DataAccessManagerMock
 
 
@@ -16,8 +16,8 @@ def container():
     conta = Container()
     conta.init_resources()
     conta.wire(modules=[sys.modules[__name__],
-                        juezinteligente.ui.main_win,
-                        juezinteligente.ui.graph])
+                        co_razon.ui.main_win,
+                        co_razon.ui.graph])
     return conta
 
 
@@ -25,7 +25,7 @@ def container():
 def case_view(container):
     """Creates a CaseView object"""
     with container.data_access_manager.override(DataAccessManagerMock()):
-        window = JuezInteligenteWindow()
+        window = CoRazonWindow()
         hypothesis = Hypothesis(name="P", label="Label", desc="Description")
         case = Case(name="Test Case", pretense=hypothesis)
         return CaseView(None, window, case)
@@ -101,5 +101,37 @@ def test_auto_layout_compactness(case_view, hypothesis_node):
     
     assert f1_node.pos().x() != f2_node.pos().x()
     assert e1_node.pos().x() != e2_node.pos().x()
+
+
+def test_recalculate_weights_upward(case_view, hypothesis_node):
+    h_node = hypothesis_node
+    hypothesis = h_node.model
+    constants = case_view.constants
+    
+    # Add a Fact to the Hypothesis model
+    fact = hypothesis.add_fact(label="Fact 1", desc="Fact Description", favorability=True, relevance=constants.RELEVANT)
+    fact_node = case_view.create_node(model=fact, node_type=FactNode, parent_node=h_node, favorable=True)
+    
+    # Add an Evidence to the Fact model
+    evidence = fact.add_evidence(number=1, label="Evidence 1", desc="Evidence Description", favorability=True, evidence_type="Testimonial", relevance=constants.PERTINENT)
+    evidence_node = case_view.create_node(model=evidence, node_type=EvidenceNode, parent_node=fact_node, favorable=True)
+    
+    # Verify initially weight is None
+    assert fact.probatory_weight is None
+    assert hypothesis.probatory_weight is None
+    
+    # Simulate setting credibility on the EvidenceNode via update_credibility
+    class MockAction:
+        def __init__(self, text):
+            self._text = text
+        def text(self):
+            return self._text
+            
+    evidence_node.update_credibility(MockAction(constants.ALMOST_TRUE))
+    
+    # Check that both the Fact's and Hypothesis's probatory weight was updated
+    assert fact.probatory_weight == constants.ALMOST_TRUE
+    assert hypothesis.probatory_weight == constants.ALMOST_TRUE
+
 
 

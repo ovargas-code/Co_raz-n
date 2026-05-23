@@ -9,9 +9,9 @@ from multipledispatch import dispatch
 from mongoengine import Document, StringField, EmbeddedDocument, ListField, EmbeddedDocumentField, IntField, \
     FloatField, BooleanField
 
-from juezinteligente.ui.constants import Constants
-from juezinteligente.util.containers import Container
-from juezinteligente.util.custom_exceptions import EvidenceException, FactException, FactRelevanceException, \
+from co_razon.ui.constants import Constants
+from co_razon.util.containers import Container
+from co_razon.util.custom_exceptions import EvidenceException, FactException, FactRelevanceException, \
     HypothesisException
 
 

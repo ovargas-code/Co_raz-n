@@ -1,6 +1,6 @@
 import pytest
-from juezinteligente.util.ai_service import build_case_from_json
-from juezinteligente.model.judge import Case, Hypothesis, Fact, Evidence
+from co_razon.util.ai_service import build_case_from_json
+from co_razon.model.judge import Case, Hypothesis, Fact, Evidence
 
 
 def test_build_case_from_json():

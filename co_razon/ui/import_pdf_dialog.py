@@ -4,8 +4,8 @@ from PySide2.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, 
     QPushButton, QFileDialog, QProgressBar, QMessageBox, QDialogButtonBox
 )
-from juezinteligente.util.ai_service import extract_text_from_pdf, parse_lawsuit_with_gemini, build_case_from_json
-from juezinteligente.model.judge import Case
+from co_razon.util.ai_service import extract_text_from_pdf, parse_lawsuit_with_gemini, build_case_from_json
+from co_razon.model.judge import Case
 
 
 class GeminiWorker(QThread):
@@ -64,7 +64,7 @@ class ImportPdfDialog(QDialog):
         self.allowed_evidence_types = allowed_evidence_types
         self.case_result = None
 
-        self.settings = QSettings("Orion", "JuezInteligente")
+        self.settings = QSettings("Orion", "CoRazon")
 
         self.setWindowTitle("Nuevo Proceso desde PDF")
         self.setMinimumSize(QSize(450, 300))
