@@ -118,7 +118,7 @@ def test_build_case_from_json():
     sub_fact = fact_1.fav_facts[0]
     assert sub_fact.name == "H11"
     assert sub_fact.label == "Comprador insolvente"
-    assert sub_fact.relevance == "Probable"
+    assert sub_fact.relevance == "Relevante"
 
     # Check evidence counts and names
     # Evidence counts are stored in case.evidence_counter
@@ -134,7 +134,7 @@ def test_build_case_from_json():
     assert ev_tia.label == "Testimonio de la tía"
     assert ev_tia.type == "Testimonial"
     assert ev_tia.credibility is None
-    assert ev_tia.relevance == "Probable"
+    assert ev_tia.relevance == "Pertinente"
 
     assert len(sub_fact.fav_evidence) == 1
     ev_extracto = sub_fact.fav_evidence[0]

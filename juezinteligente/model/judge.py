@@ -85,8 +85,14 @@ class Evidence(EmbeddedDocument, Observable):
         """
         probabilities = [constants.UNSUPPORTED, constants.UNLIKELY, constants.LIKELY, constants.MOST_LIKELY, 
                          constants.VERY_LIKELY, constants.ALMOST_TRUE, constants.TRUE]
-        return ({probability: weight for weight, probability in enumerate(probabilities)},
-                {weight: probability for weight, probability in enumerate(probabilities)})
+        prob_dict = {probability: weight for weight, probability in enumerate(probabilities)}
+        prob_dict[constants.IMPERTINENT] = 0
+        prob_dict[constants.PERTINENT] = 6
+        prob_dict[constants.IRRELEVANT] = 0
+        prob_dict[constants.RELEVANT] = 6
+        
+        weight_dict = {weight: probability for weight, probability in enumerate(probabilities)}
+        return prob_dict, weight_dict
 
     def generate_experience_rule(self, constants: Constants = Provide[Container.constants]):
         """
@@ -130,7 +136,10 @@ class Fact(EmbeddedDocument, Observable):
         Observable.__init__(self)
         EmbeddedDocument.__init__(self, *args, **kwargs)
 
-    def add_sub_fact(self, label: str, desc: str, favorability: bool = True, relevance: str = None):
+    def add_sub_fact(self, label: str, desc: str, favorability: bool = True, relevance: str = None,
+                     constants: Constants = Provide[Container.constants]):
+        if relevance is None:
+            relevance = constants.RELEVANT
         code = len(self.fav_facts) + len(self.unfav_facts) + 1
         name = self.name + str(code)
         fact = Fact(name=name, label=label, desc=desc, relevance=relevance)
@@ -142,7 +151,9 @@ class Fact(EmbeddedDocument, Observable):
         return fact
 
     def add_evidence(self, number, label, desc, favorability, evidence_type, credibility: str = None,
-                     relevance: str = None):
+                     relevance: str = None, constants: Constants = Provide[Container.constants]):
+        if relevance is None:
+            relevance = constants.PERTINENT
         name = self.EVIDENCE_NAME_INITIAL + str(number)
         evidence = Evidence(name=name, label=label, type=evidence_type, desc=desc, credibility=credibility,
                             relevance=relevance)
@@ -168,8 +179,14 @@ class Fact(EmbeddedDocument, Observable):
     def weight_definition(self, constants: Constants = Provide[Container.constants]):
         probabilities = [constants.UNSUPPORTED, constants.UNLIKELY, constants.LIKELY, constants.MOST_LIKELY,
                          constants.VERY_LIKELY, constants.ALMOST_TRUE, constants.TRUE]
-        return ({probability: weight for weight, probability in enumerate(probabilities)},
-                {weight: probability for weight, probability in enumerate(probabilities)})
+        prob_dict = {probability: weight for weight, probability in enumerate(probabilities)}
+        prob_dict[constants.IMPERTINENT] = 0
+        prob_dict[constants.PERTINENT] = 6
+        prob_dict[constants.IRRELEVANT] = 0
+        prob_dict[constants.RELEVANT] = 6
+        
+        weight_dict = {weight: probability for weight, probability in enumerate(probabilities)}
+        return prob_dict, weight_dict
 
     def probability_balance(self, probatory_weight_fav, probatory_weight_unfav,
                             constants: Constants = Provide[Container.constants]):
@@ -299,7 +316,10 @@ class Hypothesis(EmbeddedDocument, Observable):
         Observable.__init__(self)
         EmbeddedDocument.__init__(self, *args, **kwargs)
 
-    def add_fact(self, label, desc, favorability: bool = True, relevance=None):
+    def add_fact(self, label, desc, favorability: bool = True, relevance=None,
+                 constants: Constants = Provide[Container.constants]):
+        if relevance is None:
+            relevance = constants.RELEVANT
         code = len(self.fav_facts) + len(self.unfav_facts) + 1
         name = self.FACT_NAME_INITIAL + str(code)
         fact = Fact(name=name, label=label, desc=desc, relevance=relevance)
@@ -322,8 +342,14 @@ class Hypothesis(EmbeddedDocument, Observable):
     def weight_definition(self, constants: Constants = Provide[Container.constants]):
         probabilities = [constants.UNSUPPORTED, constants.UNLIKELY, constants.LIKELY, constants.MOST_LIKELY,
                          constants.VERY_LIKELY, constants.ALMOST_TRUE, constants.TRUE]
-        return ({probability: weight for weight, probability in enumerate(probabilities)},
-                {weight: probability for weight, probability in enumerate(probabilities)})
+        prob_dict = {probability: weight for weight, probability in enumerate(probabilities)}
+        prob_dict[constants.IMPERTINENT] = 0
+        prob_dict[constants.PERTINENT] = 6
+        prob_dict[constants.IRRELEVANT] = 0
+        prob_dict[constants.RELEVANT] = 6
+        
+        weight_dict = {weight: probability for weight, probability in enumerate(probabilities)}
+        return prob_dict, weight_dict
 
     def probability_balance(self, probatory_weight_fav, probatory_weight_unfav,
                             constants: Constants = Provide[Container.constants]):

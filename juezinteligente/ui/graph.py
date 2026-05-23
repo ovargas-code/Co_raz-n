@@ -837,9 +837,11 @@ class NodeWithRelevance(NodeItem):
 
         font: QFont = painter.font()
         new_font: QFont = font.__copy__()
-        metrics = QFontMetrics(font)
+        new_font.setPointSize(11)
+        metrics = QFontMetrics(new_font)
 
-        text_height = metrics.boundingRect(text).height()
+        num_lines = len(text.split('\n'))
+        text_height = num_lines * metrics.lineSpacing()
 
         y = self.node_center.y() - (self.attr_height * 7)
         rect = QRect(self.node_center.x() - self.attr_width / 2 - 5,
@@ -847,7 +849,6 @@ class NodeWithRelevance(NodeItem):
 
         text_pen = QPen()
         text_pen.setColor(convert_data_to_color(app_config['node']['attr_text_color']))
-        new_font.setPointSize(11)
         painter.setFont(new_font)
         painter.setPen(text_pen)
         painter.drawText(rect, QtCore.Qt.AlignCenter, text)
@@ -912,6 +913,12 @@ class HypothesisNode(NodeItem):
 
     def __init__(self, model, parent_node):
         super(HypothesisNode, self).__init__(model.desc, model.name, parent_node)
+        self.base_height = app_config['node']['child_height']
+        self.node_center.setY(self.base_height / 6.0 * 5.2)
+        fav_x = self.node_center.x() - self.radius - self.fav_width
+        self.fav_center = QPointF(fav_x, self.node_center.y())
+        unfav_x = self.node_center.x() + self.radius + self.fav_width
+        self.unfav_center = QPointF(unfav_x, self.node_center.y())
         self.model = model
         self.out_fav_plug = OutFavPlugItem(self)
         self.out_unfav_plug = OutUnfavPlugItem(self)
@@ -929,17 +936,18 @@ class HypothesisNode(NodeItem):
 
         font: QFont = painter.font()
         new_font: QFont = font.__copy__()
-        metrics = QFontMetrics(font)
+        new_font.setPointSize(11)
+        metrics = QFontMetrics(new_font)
 
-        text_height = metrics.boundingRect(text).height()
+        num_lines = len(text.split('\n'))
+        text_height = num_lines * metrics.lineSpacing()
 
-        y = self.node_center.y() - (self.radius + self.attr_height + text_height) * 1.8
+        y = self.node_center.y() - (self.attr_height * 7)
         rect = QRect(self.node_center.x() - self.attr_width / 2 - 5,
-                     y, self.attr_width + 11, self.attr_height + text_height + 3)
+                     y, self.attr_width + 11, self.attr_height + text_height + 9)
         
         text_pen = QPen()
         text_pen.setColor(convert_data_to_color(app_config['node']['attr_text_color']))
-        new_font.setPointSize(11)
         painter.setFont(new_font)
         painter.setPen(text_pen)
         painter.drawText(rect, QtCore.Qt.AlignCenter, text)
@@ -1064,7 +1072,7 @@ class EvidenceNode(NodeWithRelevance):
 
         relevance_menu = context_menu.addMenu(self.constants.PERTINENCE)
         relevance_action_group = QActionGroup(relevance_menu)
-        for a in self.PROBABILITY_MENU_ACTIONS:
+        for a in [self.constants.IMPERTINENT, self.constants.PERTINENT]:
             action = relevance_action_group.addAction(a)
             action.setCheckable(True)
             relevance_menu.addAction(action)
@@ -1177,7 +1185,7 @@ class FactNode(NodeWithRelevance):
         context_menu.addSeparator()
         relevance_menu = context_menu.addMenu(self.constants.RELEVANCE)
         action_group = QActionGroup(relevance_menu)
-        for a in self.PROBABILITY_MENU_ACTIONS:
+        for a in [self.constants.IRRELEVANT, self.constants.RELEVANT]:
             action = action_group.addAction(a)
             action.setCheckable(True)
             relevance_menu.addAction(action)

@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'evidence_edit_widgetPsAiDu.ui'
+## Form generated from reading UI file 'evidence_edit_widget.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.0
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
-    QPixmap, QRadialGradient)
+from PySide2.QtCore import *
+from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
@@ -52,11 +49,6 @@ class Ui_EvidenceEditForm(object):
         self.formLayout_2.setWidget(4, QFormLayout.LabelRole, self.relevancia_label)
 
         self.relevance_combo_box = QComboBox(EvidenceEditForm)
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
         self.relevance_combo_box.addItem("")
         self.relevance_combo_box.addItem("")
         self.relevance_combo_box.setObjectName(u"relevance_combo_box")
@@ -104,7 +96,7 @@ class Ui_EvidenceEditForm(object):
 
         self.retranslateUi(EvidenceEditForm)
 
-        self.relevance_combo_box.setCurrentIndex(0)
+        self.relevance_combo_box.setCurrentIndex(1)
         self.credibility_combo_box.setCurrentIndex(0)
 
 
@@ -123,13 +115,8 @@ class Ui_EvidenceEditForm(object):
         self.evidence_type_combo_box.setWhatsThis("")
 #endif // QT_CONFIG(whatsthis)
         self.relevancia_label.setText(QCoreApplication.translate("EvidenceEditForm", u"Pertinence:", None))
-        self.relevance_combo_box.setItemText(0, QCoreApplication.translate("EvidenceEditForm", u"Unsupported", None))
-        self.relevance_combo_box.setItemText(1, QCoreApplication.translate("EvidenceEditForm", u"Unlikely", None))
-        self.relevance_combo_box.setItemText(2, QCoreApplication.translate("EvidenceEditForm", u"Likely", None))
-        self.relevance_combo_box.setItemText(3, QCoreApplication.translate("EvidenceEditForm", u"Most likely", None))
-        self.relevance_combo_box.setItemText(4, QCoreApplication.translate("EvidenceEditForm", u"Very likely", None))
-        self.relevance_combo_box.setItemText(5, QCoreApplication.translate("EvidenceEditForm", u"Almost true", None))
-        self.relevance_combo_box.setItemText(6, QCoreApplication.translate("EvidenceEditForm", u"True", None))
+        self.relevance_combo_box.setItemText(0, QCoreApplication.translate("EvidenceEditForm", u"Impertinent", None))
+        self.relevance_combo_box.setItemText(1, QCoreApplication.translate("EvidenceEditForm", u"Pertinent", None))
 
         self.credibility_label.setText(QCoreApplication.translate("EvidenceEditForm", u"Credibility:", None))
         self.credibility_combo_box.setItemText(0, QCoreApplication.translate("EvidenceEditForm", u"Unsupported", None))

@@ -151,6 +151,28 @@ def parse_lawsuit_with_gemini(
 
 
 
+def _map_fact_relevance(val: Optional[str]) -> Optional[str]:
+    if not val:
+        return None
+    val_lower = val.strip().lower()
+    is_spanish = val_lower in ("sin soporte", "poco probable", "probable", "más que probable", "muy probable", "casi cierto", "cierto", "irrelevante", "relevante")
+    if val_lower in ("sin soporte", "unsupported", "irrelevante", "irrelevant"):
+        return "Irrelevante" if is_spanish else "Irrelevant"
+    else:
+        return "Relevante" if is_spanish else "Relevant"
+
+
+def _map_evidence_pertinence(val: Optional[str]) -> Optional[str]:
+    if not val:
+        return None
+    val_lower = val.strip().lower()
+    is_spanish = val_lower in ("sin soporte", "poco probable", "probable", "más que probable", "muy probable", "casi cierto", "cierto", "impertinente", "pertinente")
+    if val_lower in ("sin soporte", "unsupported", "impertinente", "impertinent"):
+        return "Impertinente" if is_spanish else "Impertinent"
+    else:
+        return "Pertinente" if is_spanish else "Pertinent"
+
+
 def build_case_from_json(data: dict) -> Case:
     """Construye un objeto Case de mongoengine a partir de la representación plana JSON extraída."""
     pretense_data = data['pretense']
@@ -205,7 +227,7 @@ def build_case_from_json(data: dict) -> Case:
         else:
             fav = True
             
-        relevance = fact_item.get('relevance', None)
+        relevance = _map_fact_relevance(fact_item.get('relevance', None))
         
         # Decide parent node: either another Fact node or the root Hypothesis
         if parent_id and parent_id in created_nodes:
@@ -226,7 +248,7 @@ def build_case_from_json(data: dict) -> Case:
             # All evidence from either party favors/supports their respective fact
             ev_fav = True
             ev_cred = None  # credibility is always None so user enters it manually
-            ev_rel = ev_item.get('relevance', None)
+            ev_rel = _map_evidence_pertinence(ev_item.get('relevance', None))
             
             fact_node.add_evidence(
                 number=evidence_counter,

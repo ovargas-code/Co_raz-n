@@ -157,6 +157,8 @@ class FactEditorWidget(QWidget):
 
         self.window_title = constants.FACT_PROPERTIES
         self.model: Fact = node.model
+        if not self.model.relevance:
+            self.model.relevance = constants.RELEVANT
         self.model.register_observer(self)
         self.node = node
 
@@ -207,6 +209,8 @@ class EvidenceEditorWidget(QWidget):
         self.window_title = constants.EVIDENCE_PROPERTIES
         self.resize(300, 200)
         self.model: Evidence = node.model
+        if not self.model.relevance:
+            self.model.relevance = constants.PERTINENT
         self.model.register_observer(self)
         self.node = node
         # This field is for managing when the relevance combo box changes and updates the model.
@@ -644,13 +648,8 @@ class JuezInteligenteWindow(QMainWindow):
 
     def new_case_from_pdf_dialog(self):
         allowed_probs = [
-            self.constants.UNSUPPORTED,
-            self.constants.UNLIKELY,
-            self.constants.LIKELY,
-            self.constants.MOST_LIKELY,
-            self.constants.VERY_LIKELY,
-            self.constants.ALMOST_TRUE,
-            self.constants.TRUE
+            self.constants.IMPERTINENT,
+            self.constants.PERTINENT
         ]
         allowed_ev_types = list(self.evidence_type_repr.list_values())
         

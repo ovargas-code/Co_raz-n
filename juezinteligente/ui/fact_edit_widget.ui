@@ -59,41 +59,16 @@
    <item row="3" column="1">
     <widget class="QComboBox" name="relevance_combo_box">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <item>
       <property name="text">
-       <string>Unsupported</string>
+       <string>Irrelevant</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Unlikely</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Likely</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Most likely</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Very likely</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Almost true</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>True</string>
+       <string>Relevant</string>
       </property>
      </item>
     </widget>

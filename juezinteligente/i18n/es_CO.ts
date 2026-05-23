@@ -588,6 +588,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="juezinteligente/ui/constants.py" line="82"/>
+        <source>Impertinent</source>
+        <translation>Impertinente</translation>
+    </message>
+    <message>
+        <location filename="juezinteligente/ui/constants.py" line="83"/>
+        <source>Pertinent</source>
+        <translation>Pertinente</translation>
+    </message>
+    <message>
+        <location filename="juezinteligente/ui/constants.py" line="84"/>
+        <source>Irrelevant</source>
+        <translation>Irrelevante</translation>
+    </message>
+    <message>
+        <location filename="juezinteligente/ui/constants.py" line="85"/>
+        <source>Relevant</source>
+        <translation>Relevante</translation>
+    </message>
+    <message>
+        <location filename="juezinteligente/ui/constants.py" line="82"/>
         <source>the denial of the fact that</source>
         <translation>la negación del hecho que</translation>
     </message>
@@ -765,39 +785,12 @@ p, li { white-space: pre-wrap; }
         <translation>Pertinencia:</translation>
     </message>
     <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="129"/>
-        <source>Unsupported</source>
-        <translation>Sin soporte</translation>
+        <source>Impertinent</source>
+        <translation>Impertinente</translation>
     </message>
     <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="134"/>
-        <source>Unlikely</source>
-        <translation>Poco probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="139"/>
-        <source>Likely</source>
-        <translation>Probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="144"/>
-        <source>Most likely</source>
-        <translation>Más que probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="149"/>
-        <source>Very likely</source>
-        <translation>Muy probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="154"/>
-        <source>Almost true</source>
-        <translation>Casi cierto</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="159"/>
-        <source>True</source>
-        <translation>Cierto</translation>
+        <source>Pertinent</source>
+        <translation>Pertinente</translation>
     </message>
     <message>
         <location filename="juezinteligente/ui/evidence_edit_widget.ui" line="118"/>
@@ -901,39 +894,12 @@ p, li { white-space: pre-wrap; }
         <translation>Regla de la experiencia:</translation>
     </message>
     <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="66"/>
-        <source>Unsupported</source>
-        <translation>Sin soporte</translation>
+        <source>Irrelevant</source>
+        <translation>Irrelevante</translation>
     </message>
     <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="71"/>
-        <source>Unlikely</source>
-        <translation>Poco probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="76"/>
-        <source>Likely</source>
-        <translation>Probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="81"/>
-        <source>Most likely</source>
-        <translation>Más que probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="86"/>
-        <source>Very likely</source>
-        <translation>Muy probable</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="91"/>
-        <source>Almost true</source>
-        <translation>Casi cierto</translation>
-    </message>
-    <message>
-        <location filename="juezinteligente/ui/fact_edit_widget.ui" line="96"/>
-        <source>True</source>
-        <translation>Cierto</translation>
+        <source>Relevant</source>
+        <translation>Relevante</translation>
     </message>
 </context>
 <context>

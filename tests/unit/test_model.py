@@ -19,6 +19,10 @@ MOST_LIKELY = 'Most likely'
 LIKELY = 'Likely'
 UNLIKELY = 'Unlikely'
 UNSUPPORTED = 'Unsupported'
+RELEVANT = 'Relevant'
+PERTINENT = 'Pertinent'
+IRRELEVANT = 'Irrelevant'
+IMPERTINENT = 'Impertinent'
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -122,6 +126,10 @@ def test_hypothesis_calculate_evidential_weight(case_simulation, const):
     (UNSUPPORTED, MOST_LIKELY, UNSUPPORTED),
     (UNLIKELY, UNLIKELY, UNLIKELY),
     (LIKELY, UNLIKELY, UNLIKELY),
+    (LIKELY, PERTINENT, LIKELY),
+    (UNSUPPORTED, PERTINENT, UNSUPPORTED),
+    (LIKELY, IMPERTINENT, UNSUPPORTED),
+    (TRUE, PERTINENT, TRUE),
 ])
 def test_evidence_calculate_evidential_weight(evidence, cred, relev, expected_weight):
     evidence.credibility = cred
@@ -211,7 +219,7 @@ def test_add_fav_fact_to_empty_hypothesis(pretense_without_facts):
     # Check the returned fact has the information that was passed to the method
     assert fact.label == "Nuevo Hecho"
     assert fact.desc == "desc"
-    assert fact.relevance is None
+    assert fact.relevance == RELEVANT
     assert fact.parent_doc == pretense_without_facts
 
 
@@ -224,7 +232,7 @@ def test_add_unfav_fact_to_empty_hypothesis(pretense_without_facts):
     # Check the returned fact has the information that was passed to the method
     assert fact.label == "Nuevo Hecho"
     assert fact.desc == "desc"
-    assert fact.relevance is None
+    assert fact.relevance == RELEVANT
     assert fact.parent_doc == pretense_without_facts
 
 
@@ -237,7 +245,7 @@ def test_add_fav_sub_fact_to_empty_fact(fact_without_evidence_subfact):
     # Check the returned fact has the information that was passed to the method
     assert fact.label == "Subfact"
     assert fact.desc == "desc"
-    assert fact.relevance is None
+    assert fact.relevance == RELEVANT
     assert fact.parent_doc == fact_without_evidence_subfact
 
 
@@ -250,7 +258,7 @@ def test_add_unfav_sub_fact_to_empty_fact(fact_without_evidence_subfact):
     # Check the returned fact has the information that was passed to the method
     assert fact.label == "Subfact"
     assert fact.desc == "desc"
-    assert fact.relevance is None
+    assert fact.relevance == RELEVANT
     assert fact.parent_doc == fact_without_evidence_subfact
 
 
@@ -264,7 +272,7 @@ def test_add_fav_evidence_to_empty_fact(fact_without_evidence_subfact):
     assert evidence.name == "MP1"
     assert evidence.label == "Evidence"
     assert evidence.label == "Evidence"
-    assert evidence.relevance is None
+    assert evidence.relevance == PERTINENT
     assert evidence.credibility is None
     assert evidence.type == EvidenceType.TESTIMONIAL
     assert evidence.parent_doc == fact_without_evidence_subfact
@@ -280,7 +288,7 @@ def test_add_unfav_evidence_to_empty_fact(fact_without_evidence_subfact):
     assert evidence.name == "MP1"
     assert evidence.label == "Evidence"
     assert evidence.label == "Evidence"
-    assert evidence.relevance is None
+    assert evidence.relevance == PERTINENT
     assert evidence.credibility is None
     assert evidence.type == EvidenceType.DOCUMENTARY
     assert evidence.parent_doc == fact_without_evidence_subfact

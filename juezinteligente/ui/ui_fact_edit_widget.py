@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'fact_edit_widgetKJanlf.ui'
+## Form generated from reading UI file 'fact_edit_widget.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.0
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
-    QPixmap, QRadialGradient)
+from PySide2.QtCore import *
+from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
@@ -44,11 +41,6 @@ class Ui_FactEditForm(object):
         self.relevance_combo_box = QComboBox(FactEditForm)
         self.relevance_combo_box.addItem("")
         self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
-        self.relevance_combo_box.addItem("")
         self.relevance_combo_box.setObjectName(u"relevance_combo_box")
 
         self.formLayout_2.setWidget(3, QFormLayout.FieldRole, self.relevance_combo_box)
@@ -77,7 +69,7 @@ class Ui_FactEditForm(object):
 
         self.retranslateUi(FactEditForm)
 
-        self.relevance_combo_box.setCurrentIndex(0)
+        self.relevance_combo_box.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(FactEditForm)
@@ -91,13 +83,8 @@ class Ui_FactEditForm(object):
 #endif // QT_CONFIG(whatsthis)
         self.fact_label_line_edit.setPlaceholderText(QCoreApplication.translate("FactEditForm", u"Mandatory", None))
         self.relevancia_label.setText(QCoreApplication.translate("FactEditForm", u"Relevance:", None))
-        self.relevance_combo_box.setItemText(0, QCoreApplication.translate("FactEditForm", u"Unsupported", None))
-        self.relevance_combo_box.setItemText(1, QCoreApplication.translate("FactEditForm", u"Unlikely", None))
-        self.relevance_combo_box.setItemText(2, QCoreApplication.translate("FactEditForm", u"Likely", None))
-        self.relevance_combo_box.setItemText(3, QCoreApplication.translate("FactEditForm", u"Most likely", None))
-        self.relevance_combo_box.setItemText(4, QCoreApplication.translate("FactEditForm", u"Very likely", None))
-        self.relevance_combo_box.setItemText(5, QCoreApplication.translate("FactEditForm", u"Almost true", None))
-        self.relevance_combo_box.setItemText(6, QCoreApplication.translate("FactEditForm", u"True", None))
+        self.relevance_combo_box.setItemText(0, QCoreApplication.translate("FactEditForm", u"Irrelevant", None))
+        self.relevance_combo_box.setItemText(1, QCoreApplication.translate("FactEditForm", u"Relevant", None))
 
         self.fact_desc_label.setText(QCoreApplication.translate("FactEditForm", u"Fact description:", None))
 #if QT_CONFIG(whatsthis)
