@@ -70,8 +70,8 @@ def test_unfavorable_connection_is_created_when_node_created_with_parent(case_vi
 
 
 @pytest.mark.parametrize("favorable, expected_point", [
-    (True, QPointF(-250, 125)),
-    (False, QPointF(50, 125))
+    (True, QPointF(-250, 145)),
+    (False, QPointF(50, 145))
 ])
 def test_position_of_new_node_with_parent(case_view, hypothesis_node, favorable, expected_point):
     fact = Fact(name="F", label="Label", desc="Description")
@@ -83,7 +83,7 @@ def test_position_of_new_hypothesis_node(case_view):
     node = case_view.create_node(model=Hypothesis(name="P", label="Label", desc="Description"),
                                  node_type=HypothesisNode)
     assert node.pos().x() == -100
-    assert abs(node.pos().y() - (-250 / 6.0 * 5.2)) < 1e-4
+    assert abs(node.pos().y() - (-290 / 6.0 * 5.2)) < 1e-4
 
 
 def test_auto_layout_compactness(case_view, hypothesis_node):

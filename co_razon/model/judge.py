@@ -136,7 +136,8 @@ class Evidence(EmbeddedDocument, Observable):
             return ""
 
         locale = QLocale.system().name()
-        if not locale.startswith("es"):
+        is_spanish = locale.startswith("es") or (constants and "pertinente" in str(constants.PERTINENT).lower())
+        if not is_spanish:
             # Maintain original English template for compatibility/tests
             if self in p_doc.unfav_evidence:
                 consequent = f"{constants.DENIAL_OF_THE_FACT_THAT} {p_doc.label}"
@@ -443,7 +444,8 @@ class Fact(EmbeddedDocument, Observable):
         parent_type = constants.FACT if isinstance(p_doc, Fact) else constants.PRETENSION
 
         locale = QLocale.system().name()
-        if not locale.startswith("es"):
+        is_spanish = locale.startswith("es") or (constants and "relevante" in str(constants.RELEVANT).lower())
+        if not is_spanish:
             if self in p_doc.unfav_facts:
                 if parent_type == constants.FACT:
                     consequent = f"{constants.DENIAL_OF} {parent_type} {constants.THAT} {p_doc.label}"
