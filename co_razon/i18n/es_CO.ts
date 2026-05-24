@@ -798,6 +798,34 @@ p, li { white-space: pre-wrap; }
         <translation>Credibilidad:</translation>
     </message>
     <message>
+        <source>Unsupported</source>
+        <translation>Sin soporte</translation>
+    </message>
+    <message>
+        <source>Unlikely</source>
+        <translation>Poco probable</translation>
+    </message>
+    <message>
+        <source>Likely</source>
+        <translation>Probable</translation>
+    </message>
+    <message>
+        <source>Most likely</source>
+        <translation>Más que probable</translation>
+    </message>
+    <message>
+        <source>Very likely</source>
+        <translation>Muy probable</translation>
+    </message>
+    <message>
+        <source>Almost true</source>
+        <translation>Casi cierto</translation>
+    </message>
+    <message>
+        <source>True</source>
+        <translation>Cierto</translation>
+    </message>
+    <message>
         <location filename="co_razon/ui/evidence_edit_widget.ui" line="177"/>
         <source>Optional</source>
         <translation>Opcional</translation>

@@ -934,6 +934,7 @@ class NodeWithRelevance(NodeItem):
 
     def update_relevance(self, action: QAction):
         self.model.relevance = action.text()
+        self.recalculate_weights_upward()
         self.update()
 
     def _paint_node_base(self, painter: QPainter, option: QStyleOptionGraphicsItem):

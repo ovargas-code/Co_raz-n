@@ -1,5 +1,6 @@
 import logging
 
+# pyrefly: ignore [missing-import]
 from PySide2.QtCore import QSize, Qt, QTimer, QCoreApplication, QRegExp, QRect
 from PySide2.QtGui import QIcon, QStandardItem, QStandardItemModel, QColor, QPixmap, QRegExpValidator
 from PySide2.QtWidgets import QMainWindow, QDialog, QTabWidget, QAction, QWidget, QMessageBox, \
@@ -131,8 +132,8 @@ class SplashScreen(QMainWindow):
             self.timer.stop()
 
             # show main window
-            main_win = CoRazonWindow()
-            main_win.showMaximized()
+            self.main_win = CoRazonWindow()
+            self.main_win.showMaximized()
 
             # close splash screen
             self.close()
@@ -232,6 +233,7 @@ class FactEditorWidget(QWidget):
         self.model.desc = self.ui.fact_desc_text_edit.toPlainText()
         self.model.relevance = self.ui.relevance_combo_box.currentText()
 
+        self.node.recalculate_weights_upward()
         self.node.update()
         self.relevance_change_flag = False
 

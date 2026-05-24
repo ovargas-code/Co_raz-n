@@ -400,6 +400,65 @@ def test_checker_visitor_unimplemented(test_case_1, fact, evidence):
     with pytest.raises(NotImplementedError):
         fact.accept(checker)
 
+def test_generate_experience_rule_spanish(case_simulation):
+    # Temporarily set system locale to Spanish
+    from PySide2.QtCore import QLocale
+    original_system = QLocale.system
+    QLocale.system = lambda: QLocale('es_CO')
+    
+    try:
+        ev = case_simulation.pretense.fav_facts[0].fav_evidence[0]
+        ev.label = "Video en el que se ve a Isabel"
+        p_doc = ev.parent_doc if ev._instance is None else ev._instance
+        p_doc.label = "Isabel tenía un yeso en su brazo derecho"
+        
+        # Test pertinent rule
+        ev.relevance = "Pertinente"
+        rule = ev.generate_experience_rule()
+        assert "Si la prueba de video en el que se ve a Isabel hace más o menos probable el hecho que Isabel tenía un yeso en su brazo derecho, entonces esta prueba es pertinente." in rule
+        
+        # Test impertinent rule
+        ev.relevance = "Impertinente"
+        rule = ev.generate_experience_rule()
+        assert "Si la prueba de video en el que se ve a Isabel no hace más o menos probable el hecho que Isabel tenía un yeso en su brazo derecho, entonces esta prueba es impertinente." in rule
+    finally:
+        QLocale.system = original_system
+
+def test_generate_experience_rule_fact_spanish(case_simulation):
+    # Temporarily set system locale to Spanish
+    from PySide2.QtCore import QLocale
+    original_system = QLocale.system
+    QLocale.system = lambda: QLocale('es_CO')
+
+    try:
+        fact = case_simulation.pretense.fav_facts[0]
+        fact.label = "Isabel tenía un yeso en su brazo derecho"
+        p_doc = fact.parent_doc if fact._instance is None else fact._instance
+        p_doc.label = "Isabel sufrió una fractura en su brazo derecho"
+
+        # Test relevant rule with hypothesis parent (la pretensión)
+        fact.relevance = "Relevante"
+        rule = fact.generate_experience_rule()
+        assert "Si el hecho que isabel tenía un yeso en su brazo derecho hace más o menos probable la pretensión que Isabel sufrió una fractura en su brazo derecho, entonces el hecho es relevante." in rule
+
+        # Test irrelevant rule with hypothesis parent (la pretensión)
+        fact.relevance = "Irrelevante"
+        rule = fact.generate_experience_rule()
+        assert "Si el hecho que isabel tenía un yeso en su brazo derecho no hace más o menos probable la pretensión que Isabel sufrió una fractura en su brazo derecho, entonces el hecho es irrelevante." in rule
+
+        # Test relevant rule with fact parent (el hecho)
+        sub_fact = case_simulation.pretense.fav_facts[2].fav_facts[0]
+        sub_fact.label = "Isabel tenía un yeso en su brazo derecho"
+        p_sub = sub_fact.parent_doc if sub_fact._instance is None else sub_fact._instance
+        p_sub.label = "Isabel sufrió una fractura en su brazo derecho"
+
+        sub_fact.relevance = "Relevante"
+        rule2 = sub_fact.generate_experience_rule()
+        assert "Si el hecho que isabel tenía un yeso en su brazo derecho hace más o menos probable el hecho que Isabel sufrió una fractura en su brazo derecho, entonces el hecho es relevante." in rule2
+    finally:
+        QLocale.system = original_system
+
+
 # TODO: Add test to calculate_evidential_weight of Hypothesis when there are facts in favor but not against,
 #  including both cases: when there is only one fact, and when there is mor than one
 
