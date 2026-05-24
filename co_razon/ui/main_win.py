@@ -355,10 +355,23 @@ class CoRazonWindow(QMainWindow):
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.checklist_widget)
 
-        self.resizeDocks([self.properties_editor_widget, self.checklist_widget],
-                         [350, 350], Qt.Horizontal)
-        self.resizeDocks([self.properties_editor_widget, self.checklist_widget],
-                         [self.size().height()/2, self.size().height()/2], Qt.Vertical)
+        # AI Copilot Dock Widget
+        self.ai_copilot_dock = QDockWidget()
+        self.ai_copilot_dock.setWindowTitle("Asistente de IA (Copiloto)")
+        self.ai_copilot_dock.setObjectName("ai_copilot_dock")
+        self.ai_copilot_dock.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        self.ai_copilot_dock.setAllowedAreas(Qt.RightDockWidgetArea | Qt.LeftDockWidgetArea)
+
+        from co_razon.ui.ai_copilot import AICopilotWidget
+        self.ai_copilot_widget = AICopilotWidget(window=self, parent=self)
+        self.ai_copilot_dock.setWidget(self.ai_copilot_widget)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.ai_copilot_dock)
+        self.tabifyDockWidget(self.checklist_widget, self.ai_copilot_dock)
+
+        self.resizeDocks([self.properties_editor_widget, self.checklist_widget, self.ai_copilot_dock],
+                         [350, 350, 350], Qt.Horizontal)
+        self.resizeDocks([self.properties_editor_widget, self.checklist_widget, self.ai_copilot_dock],
+                         [self.size().height()/3, self.size().height()/3, self.size().height()/3], Qt.Vertical)
 
     def on_tab_changed(self):
         current_widget = self.tab_container.currentWidget()
@@ -366,7 +379,7 @@ class CoRazonWindow(QMainWindow):
         if current_widget is not None:
             if type(current_widget) is CaseView:
                 case_view = current_widget
-            else:
+            elif hasattr(current_widget, "case_view"):
                 case_view = current_widget.case_view
 
         if case_view is not None:
@@ -382,6 +395,9 @@ class CoRazonWindow(QMainWindow):
             # pending_list = self.checklist_widget.findChild(QListWidget, "pending_list_widget")
             self.pending_list_widget.clear()
             self.checklist_widget.setWindowTitle(self.constants.CHECK_LIST)
+
+        if hasattr(self, 'ai_copilot_widget'):
+            self.ai_copilot_widget.refresh_ui()
     
     def close_active_case(self, index=None):
         case_view_wrapper = self.tab_container.currentWidget()
@@ -521,6 +537,8 @@ class CoRazonWindow(QMainWindow):
         fact.notify()
         case_view.create_node(model=fact, node_type=FactNode, parent_node=parent_node, favorable=fav)
         case_view.auto_layout()
+        if hasattr(self, 'ai_copilot_widget'):
+            self.ai_copilot_widget.refresh_facts()
 
     def add_sub_fact_node(self, parent_node, fact_label, favorability, fact_desc=""):
         tab_container = self.findChild(QTabWidget, "tab_container")
@@ -531,6 +549,8 @@ class CoRazonWindow(QMainWindow):
         fact.notify()
         case_view.create_node(model=fact, node_type=FactNode, parent_node=parent_node, favorable=fav)
         case_view.auto_layout()
+        if hasattr(self, 'ai_copilot_widget'):
+            self.ai_copilot_widget.refresh_facts()
 
     def add_evidence_node(self, parent_node, evidence_label, favorability, evidence_type, evidence_desc=""):
         tab_container = self.findChild(QTabWidget, "tab_container")
@@ -543,6 +563,8 @@ class CoRazonWindow(QMainWindow):
         evidence.notify()
         case_view.create_node(model=evidence, node_type=EvidenceNode, parent_node=parent_node, favorable=fav)
         case_view.auto_layout()
+        if hasattr(self, 'ai_copilot_widget'):
+            self.ai_copilot_widget.refresh_facts()
 
     def config_window(self):
         self.setMinimumSize(QSize(800, 600))
@@ -678,6 +700,9 @@ class CoRazonWindow(QMainWindow):
             self.properties_editor_widget.show()
             self.properties_editor_widget.raise_()
 
+        if hasattr(self, 'ai_copilot_widget'):
+            self.ai_copilot_widget.set_selected_node(selected_node)
+
     def new_case_dialog(self):
         dialog = NewCaseDialog(parent=self)
         resp = dialog.exec_()
@@ -714,12 +739,10 @@ class CoRazonWindow(QMainWindow):
             self.statusBar().showMessage(f"Caso '{case.name}' importado con éxito desde PDF.")
 
     def get_active_case(self):
-        tab_container = self.findChild(QTabWidget, "tab_container")
-        case_view = tab_container.currentWidget().case_view
+        case_view = self.get_active_case_view()
         if case_view is not None:
             return case_view.case
-        else:
-            return None
+        return None
 
     def save_active_case(self):
         case: Case = self.get_active_case()

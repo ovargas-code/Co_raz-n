@@ -64,13 +64,17 @@ def main(app: QApplication = Provide[Container.app]):
     sys.exit(app.exec_())
 
 
+import co_razon.ui.ai_copilot
+
 if __name__ == '__main__':
     container = Container()
     container.init_resources()
     container.wire(modules=[sys.modules[__name__],
                             co_razon.ui.main_win,
                             co_razon.ui.graph,
-                            co_razon.model.judge])
+                            co_razon.model.judge,
+                            co_razon.ui.ai_copilot])
     main()
+
 
 

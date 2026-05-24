@@ -11,14 +11,18 @@ from co_razon.util.containers import Container
 from tests.unit.mocks.mocks import DataAccessManagerMock
 
 
+import co_razon.ui.ai_copilot
+
 @pytest.fixture(scope="session", autouse=True)
 def container():
     conta = Container()
     conta.init_resources()
     conta.wire(modules=[sys.modules[__name__],
                         co_razon.ui.main_win,
-                        co_razon.ui.graph])
+                        co_razon.ui.graph,
+                        co_razon.ui.ai_copilot])
     return conta
+
 
 
 @pytest.fixture

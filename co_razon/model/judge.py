@@ -189,6 +189,16 @@ class Evidence(EmbeddedDocument, Observable):
             self._cached_inputs = inputs
             self._rule_cache = fallback  # Show fallback while loading
 
+            # Clean up previous worker if still running to prevent PySide2 crash on deletion
+            if hasattr(self, "_worker") and self._worker.isRunning():
+                try:
+                    self._worker.finished_signal.disconnect()
+                except Exception:
+                    pass
+                if not hasattr(self, "_old_workers"):
+                    self._old_workers = []
+                self._old_workers.append(self._worker)
+
             class RuleWorker(QThread):
                 finished_signal = Signal(str)
 
@@ -492,6 +502,16 @@ class Fact(EmbeddedDocument, Observable):
             self._fetching = True
             self._cached_inputs = inputs
             self._rule_cache = fallback  # Show fallback while loading
+
+            # Clean up previous worker if still running to prevent PySide2 crash on deletion
+            if hasattr(self, "_worker") and self._worker.isRunning():
+                try:
+                    self._worker.finished_signal.disconnect()
+                except Exception:
+                    pass
+                if not hasattr(self, "_old_workers"):
+                    self._old_workers = []
+                self._old_workers.append(self._worker)
 
             class FactRuleWorker(QThread):
                 finished_signal = Signal(str)
